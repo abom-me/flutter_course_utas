@@ -13,20 +13,17 @@ Learn about Flutter and how to install it, build your first app, use widgets, an
 
 ## Course Outline
 
-### Day 1: 
-- Introduction to Flutter
-- Install Flutter
-- Create a new Flutter project
-- Run the project
-- Understand the project structure
-- Understand the main.dart file
+### Day 2: 
+- Using Flutter Widgets
+- Send data to another screen
+- Learn about Flutter Packages
+
 
 ----- 
 
 ### How to install Flutter
-  You can find the installation guide in the [Flutter Installation Guide](https://docs.flutter.dev/get-started/install)
-
-  Also you can find the installation guide in the [Youtube video](https://www.youtube.com/watch?v=bt58doQ_-tQ)
+  You can find the Packages website [Flutter Packages](https://pub.dev/)
+ 
 
 
 
