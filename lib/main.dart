@@ -1,6 +1,10 @@
-import 'package:arabic_font/arabic_font.dart';
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
-import 'package:myfirst_app/sec_screen.dart';
+import 'package:http/http.dart' as http;
+import 'package:myfirst_app/login_screen.dart';
+import 'package:myfirst_app/profile.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 void main() {
   runApp(const MyApp());
@@ -28,78 +32,95 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  String name = "Click the btn to see my name";
-  TextEditingController nameTextF = TextEditingController();
-  GlobalKey<FormState> myForm = GlobalKey<FormState>();
-  setMyName() {
-    if (myForm.currentState!.validate()) {
-      name = "My Name is: ${nameTextF.text}";
+  List todos = [];
+  String token = "";
+  getTodo() async {
+    SharedPreferences myStorage = await SharedPreferences.getInstance();
+    token = myStorage.getString("token") ?? "";
+    print(token);
+    var res = await http.get(
+      Uri.parse("https://jsonplaceholder.typicode.com/todos"),
+    );
+
+    if (res.statusCode == 200) {
+      var data = jsonDecode(res.body);
+      todos = data;
       setState(() {});
-      Navigator.push(
-        context,
-        MaterialPageRoute(builder: (_) => MySecScreen(name: name)),
-      );
     } else {
-      print("Not Valid");
+      print("Oops , we didn't get the data");
     }
+  }
+
+  @override
+  void initState() {
+    getTodo();
+    super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text("Home Screen")),
+      appBar: AppBar(
+        title: Text("Home Screen"),
+
+        actions: [
+          IconButton(
+            onPressed: () {
+              if (token.isEmpty) {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => LoginScreen()),
+                );
+              } else {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => MyProfile()),
+                );
+              }
+            },
+            icon: Icon(Icons.lock),
+          ),
+        ],
+      ),
 
       body: Container(
-        padding: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
-        width: 500,
-        height: 300,
-        child: Column(
-          spacing: 20,
-          mainAxisAlignment: MainAxisAlignment.center,
+        padding: EdgeInsets.all(15),
+        child: ListView.builder(
+          itemCount: todos.length,
+          itemBuilder: (context, index) {
+            return Container(
+              width: 200,
+              height: 200,
+              padding: EdgeInsets.all(10),
+              margin: EdgeInsets.only(bottom: 10, top: 5),
 
-          children: [
-            Form(
-              key: myForm,
-              child: Column(
-                children: [
-                  TextFormField(
-                    controller: nameTextF,
-                    keyboardType: TextInputType.number,
-                    validator: (text) {
-                      if (text!.isEmpty) {
-                        return "Please Enter Your Name";
-                      }
-                      if (text.length < 3) {
-                        return "The Name must be more then 3 letters";
-                      }
-                    },
-
-                    decoration: InputDecoration(label: Text("Enter Your Name")),
-                  ),
-                ],
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(10),
+                border: Border.all(color: Colors.red, width: 3),
               ),
-            ),
 
-            Text(
-              name,
-              style: ArabicTextStyle(
-                arabicFont: ArabicFont.lemonada,
-                fontSize: 30,
+              child: SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+
+                child: Row(
+                  children: [
+                    Checkbox(
+                      value: todos[index]['completed'],
+
+                      onChanged: (status) {
+                        todos[index]["completed"] =
+                            status != null ? status : true;
+
+                        setState(() {});
+                      },
+                    ),
+
+                    Text(todos[index]['title']),
+                  ],
+                ),
               ),
-            ),
-
-            ElevatedButton(
-              onPressed: () {
-                setMyName();
-
-                // Navigator.pushReplacement(
-                //   context,
-                //   MaterialPageRoute(builder: (_) => MySecScreen()),
-                // );
-              },
-              child: Text("My Button"),
-            ),
-          ],
+            );
+          },
         ),
       ),
     );
