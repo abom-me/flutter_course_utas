@@ -9,20 +9,23 @@
 
 ## Course Overview
 
-Learn about Flutter and how to install it, build your first app, use widgets, and connect with databases and APIs, among other topics.§
+Learn about Flutter and how to install it, build your first app, use widgets, and connect with databases and APIs, among other topics.
 
 ## Course Outline
 
-### Day 2: 
-- Using Flutter Widgets
-- Send data to another screen
-- Learn about Flutter Packages
-
+### Day 3: 
+- Learn about http request
+- Learn about  how to send data to server
+- Learn about how to save data in local storage
 
 ----- 
 
-### How to install Flutter
+### Resourses
   You can find the Packages website [Flutter Packages](https://pub.dev/)
+
+  You can find JWT website [JWT](https://jwt.io/)
+
+  Video about JWT [JWT Video](https://youtu.be/7Q17ubqLfaM?feature=shared) 
  
 
 
