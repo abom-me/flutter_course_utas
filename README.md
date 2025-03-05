@@ -13,19 +13,18 @@ Learn about Flutter and how to install it, build your first app, use widgets, an
 
 ## Course Outline
 
-### Day 3: 
-- Learn about http request
-- Learn about  how to send data to server
-- Learn about how to save data in local storage
+### Day 4: 
+- Learn about supabase
+- Learn about  how login with supabase
+- Learn about how to save data in supabase
 
 ----- 
 
 ### Resourses
   You can find the Packages website [Flutter Packages](https://pub.dev/)
 
-  You can find JWT website [JWT](https://jwt.io/)
+  You can find Supabase website [Supabase](https://supabase.com/)
 
-  Video about JWT [JWT Video](https://youtu.be/7Q17ubqLfaM?feature=shared) 
  
 
 

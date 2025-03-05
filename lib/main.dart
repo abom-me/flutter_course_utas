@@ -5,8 +5,18 @@ import 'package:http/http.dart' as http;
 import 'package:myfirst_app/login_screen.dart';
 import 'package:myfirst_app/profile.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
-void main() {
+final supabase = Supabase.instance.client;
+
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  await Supabase.initialize(
+    url: "https://tvuovkhrwxlrqmduspay.supabase.co",
+    anonKey:
+        "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InR2dW92a2hyd3hscnFtZHVzcGF5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDExNzgyNTMsImV4cCI6MjA1Njc1NDI1M30.U4fT_K3APmoXm2c0Zj8fYy7-opXH5d4TioUHqHuu4xo",
+  );
   runApp(const MyApp());
 }
 
@@ -66,15 +76,16 @@ class _HomeScreenState extends State<HomeScreen> {
         actions: [
           IconButton(
             onPressed: () {
-              if (token.isEmpty) {
+              final user = supabase.auth.currentUser;
+              if (user?.email != null) {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => LoginScreen()),
+                  MaterialPageRoute(builder: (context) => MyProfile()),
                 );
               } else {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => MyProfile()),
+                  MaterialPageRoute(builder: (context) => LoginScreen()),
                 );
               }
             },

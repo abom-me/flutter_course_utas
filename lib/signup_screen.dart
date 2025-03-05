@@ -1,41 +1,42 @@
 import 'package:flutter/material.dart';
+import 'package:myfirst_app/login_screen.dart';
 import 'package:myfirst_app/main.dart';
-import 'package:myfirst_app/profile.dart';
-import 'package:myfirst_app/signup_screen.dart';
 
-class LoginScreen extends StatefulWidget {
-  const LoginScreen({super.key});
+class SignupScreen extends StatefulWidget {
+  const SignupScreen({super.key});
 
   @override
-  State<LoginScreen> createState() => _LoginScreenState();
+  State<SignupScreen> createState() => _SignupScreenState();
 }
 
-class _LoginScreenState extends State<LoginScreen> {
+class _SignupScreenState extends State<SignupScreen> {
+  TextEditingController emailController = TextEditingController();
+  TextEditingController passwordController = TextEditingController();
   final formKey = GlobalKey<FormState>();
-  final emailController = TextEditingController();
-  final passwordController = TextEditingController();
   bool isLoading = false;
-  login() async {
+  signup() async {
     setState(() {
       isLoading = true;
     });
     try {
-      await supabase.auth.signInWithPassword(
-        email: emailController.text,
+      await supabase.auth.signUp(
         password: passwordController.text,
+        email: emailController.text,
+        data: {"name": "Omar", "phone": "91234567"},
       );
-      Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) => MyProfile()),
-      );
-    } catch (e) {
-      showDialog(
+      await showDialog(
         context: context,
-        builder: (context) {
-          return AlertDialog(
-            title: Text("Login Failed"),
-            content: Text("Your email or password is incorrect"),
-          );
+        builder: (co) {
+          return Dialog(child: Text("Welcome to the app"));
+        },
+      );
+      await supabase.auth.signOut();
+    } catch (e) {
+      print(e);
+      await showDialog(
+        context: context,
+        builder: (co) {
+          return Dialog(child: Text("Oops something went wrong"));
         },
       );
     } finally {
@@ -48,6 +49,7 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(title: Text("Signup")),
       body: Container(
         padding: EdgeInsets.all(15),
         child: Form(
@@ -62,6 +64,7 @@ class _LoginScreenState extends State<LoginScreen> {
               ),
 
               TextFormField(
+                obscureText: true,
                 onTap: () {},
                 controller: passwordController,
                 decoration: InputDecoration(labelText: "Password"),
@@ -71,19 +74,19 @@ class _LoginScreenState extends State<LoginScreen> {
                   ? CircularProgressIndicator()
                   : TextButton(
                     onPressed: () {
-                      login();
+                      signup();
                     },
-                    child: Text("Login", style: TextStyle(fontSize: 30)),
+                    child: Text("Signup", style: TextStyle(fontSize: 30)),
                   ),
               TextButton(
                 onPressed: () {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => SignupScreen()),
+                    MaterialPageRoute(builder: (context) => LoginScreen()),
                   );
                 },
 
-                child: Text("You dont have an account? Signup"),
+                child: Text("You have an account? Login"),
               ),
             ],
           ),
